@@ -1,0 +1,8 @@
+file_format: "1"
+id: tern
+name: Tern
+type: shield
+url: https://github.com/rschenk/tern
+requires: [seeed_xiao]
+features:
+  - keys

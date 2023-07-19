@@ -1,0 +1,409 @@
+meta:
+  engine: 4.0.0
+  name: tern
+
+units:
+  # Parameters
+  # ==========
+  # For Chocfox CFX Keycaps
+  capx: 16.5      # Key cap size horizontal
+  capy: 16.5      # Key cap size vertical
+  kx: capx + 0.5    # Key spacing horizontal
+  ky: capy + 0.5    # Key spacing vertical
+  angle: 22         # Angle between halves
+  pinky_stagger: 5/4ky
+  pinky_splay: 5  # Degrees of splay between pinky and ring columns
+  pinky_adj: -3   # Adjustment to compensate for splay spacing
+  ring_splay: 3
+  ring_adj: -8
+
+  # Constants
+  # =========
+  xiao_x: 17.5
+  xiao_y: 20
+  sf: 21.5        # Switch footprint (square)
+
+  # Outlines
+  # ========
+  xiao_cutout_x: 19.5
+  xiao_cutout_y: 21.5
+  mounting_hole_r: 1
+  clearance_hole_r: 1.6
+  cover_hole_margin: 3  # Inset from the edge
+
+  # Laser
+  # -----
+  kerf: 0.006 * 25.4 # Inches to mm
+
+points:
+  # Keys/Switches
+  # =============
+  zones.matrix:
+    anchor.shift: [150, -125]
+    rotate: -angle + pinky_splay + ring_splay
+    mirror: &mirror
+      ref: matrix_inner_top
+      shift: [0.5sf, 0.5sf]
+      distance: 13
+    key: &key
+      width: capx
+      height: capy
+      spread: kx
+      padding: ky
+      autobind: false
+    rows:
+      bottom:
+      home:
+      top:
+    columns:
+      pinky:
+        rows:
+          bottom.skip: true
+          home:
+            bind: [0.5ky, 0, 0, 0]
+            row_net: P2
+            column_net: P6
+          top:
+            bind: [0, 0.5kx, 0.5ky, 0]
+            row_net: P0
+            column_net: P6
+          home.mirror:
+            row_net: P3
+            column_net: P10
+          top.mirror:
+            row_net: P1
+            column_net: P10
+      ring:
+        key:
+          stagger: pinky_stagger
+          splay: -pinky_splay
+          origin: [0, pinky_adj]
+          spread: 1.1kx
+        rows:
+          bottom:
+            bind: [0.5ky, 3kx, 0.5, 0.5kx]
+            row_net: P4
+            column_net: P6
+          home:
+            bind: [0, 0.5kx, 0, 0]
+            row_net: P3
+            column_net: P6
+          top:
+            bind: [0, 0.5kx, 0.5ky, 0]
+            row_net: P1
+            column_net: P6
+          bottom.mirror:
+            row_net: P5
+            column_net: P9
+          home.mirror:
+            row_net: P2
+            column_net: P10
+          top.mirror:
+            row_net: P0
+            column_net: P10
+      middle:
+        key:
+          stagger: 0.25ky
+          splay: -ring_splay
+          origin: [0, ring_adj]
+        rows:
+          bottom:
+            bind: [0.5ky, 0.5kx, 0, 0.5kx]
+            row_net: P5
+            column_net: P6
+          home:
+            bind: [0, 0.5kx, 0, 0]
+            row_net: P2
+            column_net: P7
+          top:
+            bind: [0, 0, 0.5ky, 0]
+            row_net: P0
+            column_net: P7
+          bottom.mirror:
+            row_net: P4
+            column_net: P9
+          home.mirror:
+            row_net: P3
+            column_net: P9
+          top.mirror:
+            row_net: P1
+            column_net: P9
+      index:
+        key:
+          stagger: -0.25ky
+        rows:
+          bottom:
+            bind: [0.5ky, 0, 0, 0]
+            row_net: P4
+            column_net: P7
+          home:
+            row_net: P3
+            column_net: P7
+          top:
+            bind: [0, 0, 0.5ky, 0.5kx]
+            row_net: P1
+            column_net: P7
+          bottom.mirror:
+            row_net: P5
+            column_net: P8
+          home.mirror:
+            row_net: P2
+            column_net: P9
+          top.mirror:
+            row_net: P0
+            column_net: P9
+      inner:
+        key:
+          stagger: -0.5ky
+        rows:
+          bottom.skip: true
+          home:
+            bind: [0.5ky, 0, 0.5ky, 0.5kx]
+            row_net: P2
+            column_net: P8
+            tags:
+              matrix_inner: true
+          top:
+            bind: [0, 0, 0.5ky, 0.5kx]
+            row_net: P0
+            column_net: P8
+            tags:
+              matrix_inner: true
+          home.mirror:
+            row_net: P3
+            column_net: P8
+          top.mirror:
+            row_net: P1
+            column_net: P8
+  zones.thumb:
+    anchor:
+      ref: matrix_inner_bottom
+      shift: [0, -14]
+    mirror: *mirror
+    key: *key
+    columns:
+      tucky:
+        key:
+          name: thumb_tucky
+          bind: [0.5ky, 0.5kx, 0, 0]
+          row_net: P5
+          column_net: P7
+        key.mirror:
+          row_net: P4
+          column_net: P10
+      reachy:
+        key:
+          stagger: 0
+          splay: -5
+          origin: [-kx/2, -kx/2]
+          name: thumb_reachy
+          bind: [1.5ky, 0, 0, 0]
+          row_net: P4
+          column_net: P8
+        key.mirror:
+          row_net: P5
+          column_net: P10
+  zones.mcu:
+    anchor:
+      aggregate.parts: [matrix_inner_top, mirror_matrix_inner_top]
+      shift: [0, -0.7ky - 0.5xiao_y]
+    key:
+      name: mcu
+      width: xiao_x
+      height: xiao_y
+  zones.mounting_hole:
+    anchor:
+      ref: matrix_inner_home
+      shift: [-0.5kx + 4, -ky + 4]
+    mirror: *mirror
+    key:
+      name: mounting_hole
+      width: 1
+      height: 1
+  zones.mcu_cover_hole:
+    anchor:
+      ref: matrix_inner_home
+      shift: [capx/2 + cover_hole_margin, -capy/2 + cover_hole_margin]
+    mirror: *mirror
+    key:
+      name: mcu_cover_hole
+      width: 1
+      height: 1
+
+outlines:
+    _key_outline:
+      - what: rectangle
+        bound: true
+        size: sf
+        where:
+          - /matrix_.*/
+          - /thumb_.*/
+    _center:
+      - what: polygon
+        points:
+        - ref: matrix_inner_top
+          shift: [0, -0.7ky]
+        - ref: mirror_matrix_inner_top
+          shift: [0, -0.7ky]
+        - ref: mirror_thumb_reachy
+          shift: [0, 0.2ky]
+        - ref: thumb_reachy
+          shift: [0, 0.2ky]
+      - what: rectangle
+        bound: true
+        size: sf
+        where: [matrix_inner]  # Include the inner keys in addition to the center polygon 
+    _panel:
+      - name: _center
+        # fillet: 3  # The inner rounding where the glue meets the top center keys
+      - _key_outline
+    panel:
+      - name: _panel
+        # fillet: 1.5
+    _switches:
+      - what: rectangle
+        size: 14 - kerf
+        where:
+          - /matrix_.*/
+          - /thumb_.*/
+    _keycaps:
+      - what: rectangle
+        size: [capx, capy]
+        where:
+          - /matrix_.*/
+          - /thumb_.*/
+    _mcu:
+      - what: rectangle
+        adjust.ref: mcu
+        size: [xiao_x, xiao_y]
+    _mcu_cutout:
+      - what: rectangle
+        adjust:
+          ref: mcu
+          shift: [0, 1]
+        size: [xiao_cutout_x, xiao_cutout_y + 1] 
+    _mounting_holes:
+      - what: circle
+        adjust.ref: mounting_hole
+        radius: mounting_hole_r
+      - what: circle
+        adjust.ref: mirror_mounting_hole
+        radius: mounting_hole_r
+      - what: circle
+        adjust.ref: mcu_cover_hole
+        radius: clearance_hole_r
+      - what: circle
+        adjust.ref: mirror_mcu_cover_hole
+        radius: clearance_hole_r
+    mcu_cover:
+      - what: polygon
+        points:
+        - ref: matrix_inner_home
+          shift: [kx/2 + 0.25, ky/2]
+        - ref: mirror_matrix_inner_home
+          shift: [kx/2 + 0.25, ky/2]
+        - ref: mirror_matrix_inner_home
+          shift: [kx/2 + 0.25, -ky/2 + cover_hole_margin - 1]
+        - 
+          - ref: mirror_matrix_inner_home
+            shift: [kx/2 + 0.25, ky/2]
+            affect: x
+          - ref: mirror_matrix_inner_home
+            shift: [kx/2 + 0.25, -ky + - cover_hole_margin - 1.5]
+            affect: y
+        - 
+          - ref: matrix_inner_home
+            shift: [kx/2 + 0.25, ky/2]
+            affect: x
+          - ref: matrix_inner_home
+            shift: [kx/2 + 0.25, -ky + -cover_hole_margin - 1.5]
+            affect: y
+        - ref: matrix_inner_home
+          shift: [kx/2 + 0.25, -ky/2 + cover_hole_margin - 1]
+      - what: circle
+        operation: stack
+        adjust.ref: mcu_cover_hole
+        radius: mounting_hole_r
+      - what: circle
+        operation: stack
+        adjust.ref: mirror_mcu_cover_hole
+        radius: mounting_hole_r
+    demo_switches:
+      - panel
+      - ^_switches
+      - ^_mcu
+      - ^_mounting_holes
+    demo_keycaps:
+      - panel
+      - ^_keycaps
+      - ^_mcu
+      - ^_mounting_holes
+      - ^mcu_cover
+    switchplate:
+      - panel
+      - operation: subtract
+        name: _switches
+        fillet: 0.5
+      - operation: subtract
+        name: _mcu_cutout
+      - operation: stack
+        name: _mounting_holes
+
+
+pcbs:
+  tern:
+    outlines:
+      main:
+        outline: panel
+
+    footprints:
+
+      switches:
+        what: choc
+        where: &switches_where
+          - /matrix_.*/
+          - /thumb_.*/
+        params:
+          from: "{{colrow}}"
+          to: "{{row_net}}"
+          keycaps: false
+          hotswap: true
+
+      switch_bonus_goodies:
+        what: choc_bonus_goodies
+        where: *switches_where
+        params:
+          hotswap_silk_screen: true
+          bottom_plate_cutout: true
+
+      diodes:
+        what: better_diode
+        where: *switches_where 
+        adjust:
+          shift: [0, -4.7]
+          rotate: 180
+        params:
+          from: "{{colrow}}"
+          to: "{{column_net}}"
+          front: true
+          back: false
+          through_hole: false
+          via_from: true
+          via_to: true
+
+      xiao:
+        what: xiao
+        where:
+          ref: mcu
+
+      mounting_holes:
+        what: mountinghole
+        where:
+          - /mounting_hole/
+
+      mcu_mounting_holes:
+        what: mountinghole
+        where:
+          - /mcu_cover_hole/
+        params:
+          plated: true

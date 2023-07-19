@@ -1,0 +1,21 @@
+#!/bin/sh
+
+# Usage: exposes a Docker container as if it was the ergogen command itself.
+# Any arguments passed to this script will be passed through to ergogen.
+#
+# If the image isn't built, it will build one.
+
+PATH_TO_DOCKERFILE=../container # Relative to this script
+IMAGE_NAME=ergogen-v4
+
+SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]:-$0}"; )" &> /dev/null && pwd 2> /dev/null; )";
+
+# Check if image exsists and build one if it doesn't
+docker image inspect $IMAGE_NAME >/dev/null 2>&1 && true || \
+  docker build -t $IMAGE_NAME $SCRIPT_DIR/$PATH_TO_DOCKERFILE
+
+docker run \
+  --rm \
+  --mount "type=bind,src=$(pwd),dst=/workdir" \
+  --workdir '/workdir' \
+  $IMAGE_NAME "$@"
