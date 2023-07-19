@@ -27,7 +27,7 @@ This uses an identical matrix to the Hummingbird, so you can just lie to your fi
 
 ## Build Guide
 
-[Build guided and bill of materials are here](docs/build_guide.md)
+[Build guide and bill of materials are here](docs/build_guide.md)
 
 ## Thanks
 
