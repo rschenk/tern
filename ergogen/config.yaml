@@ -26,7 +26,7 @@ units:
   # Outlines
   # ========
   xiao_cutout_x: 19.5
-  xiao_cutout_y: 21.5
+  xiao_cutout_y: 22.5
   mounting_hole_r: 1
   clearance_hole_r: 1.6
   cover_hole_margin: 3  # Inset from the edge
@@ -280,8 +280,8 @@ outlines:
       - what: rectangle
         adjust:
           ref: mcu
-          shift: [0, 1]
-        size: [xiao_cutout_x, xiao_cutout_y + 1] 
+          shift: [0, 0]
+        size: [xiao_cutout_x, xiao_cutout_y]
     _mounting_holes:
       - what: circle
         adjust.ref: mounting_hole
