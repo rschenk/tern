@@ -29,6 +29,10 @@ This uses an identical matrix to the Hummingbird, so you can just lie to your fi
 
 [Build guide and bill of materials are here](docs/build_guide.md)
 
+## Want Sculpted Keycaps?
+
+I designed this board for Chosfox CFX keycaps, which are 1mm narrower than standard Choc keycaps such as MBK. The CFX keycaps are great if you like flat uniform keycaps, but if you want something sculpted, I forked the Chicago Steno repo and resized them to fit the CFX spacing. They are also sprued so you can 3D print them from someplace like JLC. See [rschenk/cfx_chicago_stenographer](https://github.com/rschenk/cfx_chicago_stenographer)
+
 ## Thanks
 
 * [Hummingbird](https://github.com/PJE66/hummingbird) for the original idea and matrix
